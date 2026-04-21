@@ -5,107 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GGP Training - Opiumwet & ASTMA</title>
     <style>
-        :root { --police-blue: #003082; --gold: #ffcc00; --light-bg: #f4f7f9; --correct: #28a745; --wrong: #dc3545; }
+        :root { --police-blue: #003082; --gold: #ffcc00; --light-bg: #f4f7f9; --correct: #28a745; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--light-bg); margin: 0; padding: 20px; }
-        .container { background: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; }
+        .container { background: white; max-width: 1100px; margin: 0 auto; padding: 30px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .hidden { display: none !important; }
         
         #admin-panel { background: #333; color: white; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         h1, h2, h3 { color: var(--police-blue); border-bottom: 3px solid var(--police-blue); padding-bottom: 5px; }
         
-        .wettekst { background: #fffde7; padding: 20px; border: 1px solid #ffe57f; font-size: 0.95em; line-height: 1.6; margin: 20px 0; border-radius: 4px; }
-        .bevoegdheid-item { margin-bottom: 10px; padding-left: 15px; border-left: 3px solid var(--gold); }
-        
-        .oc-instructie { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin: 15px 0; font-size: 0.9em; color: #0d47a1; }
+        .oc-instructie { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin: 15px 0; font-size: 0.95em; color: #0d47a1; }
         .oc-melding { background: #1a1a1a; color: #00ff00; padding: 15px; font-family: monospace; margin-bottom: 10px; border-left: 5px solid var(--gold); }
 
         .btn { background: var(--police-blue); color: white; padding: 12px 25px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; margin: 5px; }
         
-        .evidence-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-        .evidence-grid img { width: 100%; border-radius: 4px; border: 1px solid #ccc; height: 120px; object-fit: cover; }
+        .astma-layout { display: grid; grid-template-columns: 420px 1fr; gap: 20px; }
+        .chaos-box { background: #f8f9fa; padding: 15px; border: 1px solid #ddd; max-height: 800px; overflow-y: auto; }
+        .drag-item { background: white; border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; cursor: grab; border-left: 5px solid var(--police-blue); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        textarea { width: 100%; height: 160px; margin-top: 10px; border: 1px solid #ddd; font-size: 13px; font-family: inherit; padding: 10px; box-sizing: border-box; resize: vertical; }
         
-        .astma-layout { display: grid; grid-template-columns: 380px 1fr; gap: 20px; }
-        .chaos-box { background: #f8f9fa; padding: 15px; border: 1px solid #ddd; max-height: 650px; overflow-y: auto; }
-        .drag-item { background: white; border: 1px solid #ccc; padding: 10px; margin-bottom: 12px; cursor: grab; border-left: 5px solid var(--police-blue); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        textarea { width: 100%; height: 120px; margin-top: 8px; border: 1px solid #ddd; font-size: 13px; font-family: inherit; padding: 8px; box-sizing: border-box; resize: vertical; background: #fff; }
-        
-        .drop-zone { background: #fff; border: 2px solid #cbd5e1; padding: 10px; margin-bottom: 10px; min-height: 100px; transition: 0.3s; }
-        .drop-zone:hover { border-color: var(--police-blue); background: #f0f4f8; }
-        .zone-header { font-weight: bold; font-size: 11px; color: var(--police-blue); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .feed-card { border-left: 6px solid var(--correct); background: #fff; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .drop-zone { background: #fff; border: 2px solid #cbd5e1; padding: 10px; margin-bottom: 10px; min-height: 120px; transition: 0.2s; }
+        .drop-zone:hover { background: #f0f4f8; border-color: var(--police-blue); }
+        .zone-header { font-weight: bold; font-size: 11px; color: var(--police-blue); margin-bottom: 5px; text-transform: uppercase; }
+        .feed-card { border-left: 6px solid var(--correct); background: #fff; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
     </style>
 </head>
 <body>
 
 <div id="admin-panel" class="hidden">
     <strong>👨‍🏫 REGIEPANEEL</strong>
-    <button class="btn" style="background:#dc3545; font-size:11px;" onclick="location.reload()">Systeem Volledig Resetten</button>
+    <button class="btn" style="background:#dc3545; font-size:11px;" onclick="location.reload()">Systeem Reset</button>
 </div>
 
 <div class="container">
-    <div id="screen-1" style="text-align: center; padding: 50px 0;">
+    <div id="screen-1" style="text-align: center; padding: 40px 0;">
         <h1>Toegang Politiesysteem</h1>
-        <p>Log in om de training te starten.</p>
-        <input type="text" id="student-name" placeholder="Voornaam" style="padding: 12px; width: 280px; margin-bottom:10px; border-radius:4px; border:1px solid #ccc;"><br>
-        <select id="nato-class" style="padding: 12px; width: 305px; margin-bottom:20px; border-radius:4px; border:1px solid #ccc;">
+        <input type="text" id="student-name" placeholder="Voornaam" style="padding: 12px; width: 280px; margin-bottom:10px;"><br>
+        <select id="nato-class" style="padding: 12px; width: 305px; margin-bottom:20px;">
             <option value="">-- Kies uw klas --</option>
-            <option value="DOCENT">👨‍🏫 DOCENT / ADMIN</option>
-            <option value="Alpha">Alpha</option>
-            <option value="Bravo">Bravo</option>
-            <option value="Charlie">Charlie</option>
-            <option value="Delta">Delta</option>
+            <option value="DOCENT">👨‍🏫 DOCENT</option>
+            <option value="Alpha">Alpha</option><option value="Bravo">Bravo</option>
+            <option value="Charlie">Charlie</option><option value="Delta">Delta</option>
         </select><br>
-        <button class="btn" onclick="login()">Systeem Starten</button>
-    </div>
-
-    <div id="screen-2" class="hidden">
-        <h1>Artikel 9 Opiumwet: Opsporingsbevoegdheden</h1>
-        <div class="wettekst">
-            <div class="bevoegdheid-item">
-                <strong>Lid 1: Toegang & Betreden</strong><br>
-                Opsporingsambtenaren hebben toegang tot plaatsen (a) en vervoermiddelen (b) waar redelijkerwijs vermoeden is van aanwezigheid van middelen uit Lijst I of II.
-            </div>
-            <div class="bevoegdheid-item">
-                <strong>Lid 2: Schouwing & Onderzoek</strong><br>
-                Bevoegdheid tot schouwing van goederen, het nemen van monsters en het vorderen van inzage in bescheiden/gegevensdragers.
-            </div>
-            <div class="bevoegdheid-item">
-                <strong>Lid 3: Inbeslagneming</strong><br>
-                Opsporingsambtenaren zijn te allen tijde bevoegd tot inbeslagneming van daarvoor vatbare voorwerpen.
-            </div>
-        </div>
-        <button class="btn" onclick="goToScreen(4)">Start Casus 'De Kade' →</button>
+        <button class="btn" onclick="login()">Start Training</button>
     </div>
 
     <div id="screen-4" class="hidden">
-        <h1>PV-Training: Casus 'De Kade'</h1>
+        <h1>PV-Training: De Lekkade (ASTMA)</h1>
         
         <div class="oc-instructie">
-            <strong>⚠️ ACADEMISCHE EISEN:</strong><br>
-            Verbeter de onderstaande teksten in het tekstvak voordat je ze versleept.
-            <ul>
-                <li>Gebruik de <strong>ik-vorm</strong> (praat tegen de rechter).</li>
-                <li>Gebruik de <strong>onvoltooid verleden tijd (OVT)</strong>.</li>
-                <li>Benoem expliciet de <strong>redenen van wetenschap</strong> (bijv. "Ik zag...", "Ik rook...").</li>
-            </ul>
+            <strong>⚠️ OPDRACHT:</strong><br>
+            De onderstaande chaos-teksten bevatten cruciale details (namen, ID-gegevens, locaties). 
+            Herschrijf ze in de tekstvakken naar de academische standaard: 
+            <strong>Ik-vorm</strong>, <strong>OVT</strong> en <strong>Redenen van wetenschap</strong>. 
+            Sleep ze daarna naar de juiste ASTMA-fase.
         </div>
 
         <div class="oc-melding">
-            [MELDING OC]: "Eenheid, ga naar de kade nabij de A2. Er staat een verdacht voertuig met een openstaande kofferbak."
-        </div>
-
-        <div class="evidence-grid">
-            <img src="Schermafbeelding 2026-04-21 112952.jpg" title="Voertuig kade">
-            <img src="Schermafbeelding 2026-04-21 112910.jpg" title="Zijaanzicht">
-            <img src="Schermafbeelding 2026-04-21 113011.jpg" title="Verborgen ruimte">
-            <img src="Schermafbeelding 2026-04-21 113050.jpg" title="Inbeslagname">
+            [MELDING OC]: "Noodhulp, ga naar de Lekkade t.h.v. hm-paal 12.4 in Houten. Verdacht voertuig SH-828-P."
         </div>
 
         <div class="astma-layout">
             <div class="chaos-box" id="chaos-items">
                 <h3>Chaos-fragmenten</h3>
-                <p><small>Bewerk de tekst en sleep naar de juiste ASTMA-fase.</small></p>
             </div>
             <div class="astma-zones">
                 <div class="drop-zone" data-fase="A" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">AANLEIDING (A)</div></div>
@@ -116,7 +77,6 @@
             </div>
         </div>
         
-        <h3 style="margin-top:40px;">Uw Proces-verbaal Feed</h3>
         <div id="pv-feed"></div>
     </div>
 </div>
@@ -124,30 +84,25 @@
 <script>
     let userName = "", userClass = "";
 
-    // BRONTEKSTEN ZONDER 'IK', ZONDER OVT, ZONDER WETENSCHAP (DE CHAOS)
     const pvData = [
-        {f: "A", t: "Melding van de meldkamer over een auto die raar stond bij de kade op de A2."},
-        {f: "S", t: "Er staat een zwarte Peugeot 5008. De kofferbak is deels geopend."},
-        {f: "T", t: "Op het oog is niets te zien. Bij de sluiting van de kofferbak zit een metalen plaat. Op kniehoogte zit die plaat en met een vinger erin voelt het als een plaat die er niet hoort."},
-        {f: "T", t: "Rechterzijde kofferbak, na wegtrekken bekleding wordt een houten plaat zichtbaar op een metalen plaat."},
-        {f: "T", t: "Linkerzijde kofferbak, weer een houten plaat zichtbaar. Metalen plaat is mogelijk voorzien van een scharnier."},
-        {f: "M", t: "In de verborgen ruimte liggen 10 pakken met een gewicht van totaal 10.9 kilo cocaïne."},
-        {f: "M", t: "De witte pakketten zijn op grond van de Opiumwet afgepakt en in beslag genomen."},
-        {f: "Af", t: "Verdachte is aangehouden en overgebracht naar cellencomplex Houten voor onderzoek."}
+        {f: "A", t: "Dinsdag 21 april 2026, 11:15 uur. Melding via de meldkamer voor de Lekkade in Houten, t.h.v. hectometerpaal 12.4. Een getuige heeft een zwart voertuig gezien met de achterklep open."},
+        {f: "S", t: "Om 11:23 uur aankomst op de Lekkade. Er staat een zwarte Peugeot 5008, kenteken SH-828-P. Een man staat bij de geopende kofferbak. Hij geeft zijn naam op als Jean-Pierre Vermeulen, geboren 12-05-1988 te Utrecht. Hij woont aan de Dorpsstraat 12 te Nieuwegein."},
+        {f: "S", t: "De man overhandigt op verzoek een identiteitsbewijs. Het is een Nederlands paspoort, nummer NK7281920, geldig tot 20 oktober 2030. De foto op het document komt overeen met het gezicht van de man die voor de auto staat."},
+        {f: "T", t: "Bij de drempel van de kofferbak is een metalen plaat zichtbaar. Na onderzoek met de hand voelt de plaat los aan. De dikte van de plaat wijkt af van wat normaal is bij dit type Peugeot."},
+        {f: "T", t: "Achter de bekleding aan de rechterzijde zit een houten paneel verborgen. Dit paneel is met zilverkleurige schroeven bevestigd aan een stalen frame onder de achterbank."},
+        {f: "M", t: "In de ruimte onder de panelen liggen 10 witte pakketten. Ze wegen samen precies 10.9 kilo. Een indicatietest ter plaatse geeft aan dat het om cocaïne gaat."},
+        {f: "M", t: "Op grond van Artikel 9 van de Opiumwet worden de 10 pakketten drugs en de Peugeot SH-828-P in beslag genomen."},
+        {f: "Af", t: "Jean-Pierre Vermeulen wordt om 11:45 uur aangehouden. Hij is overgebracht naar het cellencomplex in Houten aan de Schaft 5. De hulpofficier van justitie is geïnformeerd."}
     ];
 
     function login() {
         userName = document.getElementById('student-name').value;
         userClass = document.getElementById('nato-class').value;
-        if(!userName || !userClass) return alert("Vul a.u.b. alle velden in.");
+        if(!userName || !userClass) return alert("Vul gegevens in.");
         if(userClass === "DOCENT") document.getElementById('admin-panel').classList.remove('hidden');
-        goToScreen(2);
-    }
-
-    function goToScreen(num) {
-        document.querySelectorAll('.container > div').forEach(d => d.classList.add('hidden'));
-        document.getElementById('screen-' + num).classList.remove('hidden');
-        if(num === 4) loadChaosItems();
+        document.getElementById('screen-1').classList.add('hidden');
+        document.getElementById('screen-4').classList.remove('hidden');
+        loadChaosItems();
     }
 
     function loadChaosItems() {
@@ -181,13 +136,12 @@
             const feed = document.getElementById('pv-feed');
             const card = document.createElement('div');
             card.className = 'feed-card';
-            card.innerHTML = `<strong>${userName} - FASE ${zoneFase}</strong><p>${itemTxt}</p>`;
+            card.innerHTML = `<strong>FASE ${zoneFase}</strong><p>${itemTxt}</p>`;
             feed.insertBefore(card, feed.firstChild);
         } else {
-            alert("STOP: Dit tekstfragment hoort niet in de fase '" + zoneFase + "'. Kijk goed naar de ASTMA structuur!");
+            alert("Onjuiste fase!");
         }
     }
 </script>
-
 </body>
 </html>
