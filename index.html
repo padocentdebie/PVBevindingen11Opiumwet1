@@ -11,59 +11,52 @@
         .hidden { display: none !important; }
         
         #admin-panel { background: #333; color: white; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .leaderboard { background: #fff; border: 2px solid var(--police-blue); padding: 15px; border-radius: 8px; margin-top: 20px; }
-        .score-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
-        .score-row { background: #f8f9fa; padding: 8px; border: 1px solid #eee; border-radius: 4px; text-align: center; font-size: 0.9em; }
-        .score-row strong { color: var(--police-blue); display: block; font-size: 1.1em; }
-
         h1, h2, h3 { color: var(--police-blue); border-bottom: 3px solid var(--police-blue); padding-bottom: 5px; }
+        
         .wettekst { background: #fffde7; padding: 20px; border: 1px solid #ffe57f; font-size: 0.95em; line-height: 1.6; margin: 20px 0; border-radius: 4px; }
         .bevoegdheid-item { margin-bottom: 10px; padding-left: 15px; border-left: 3px solid var(--gold); }
         
+        .oc-instructie { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin: 15px 0; font-size: 0.9em; color: #0d47a1; }
+        .oc-melding { background: #1a1a1a; color: #00ff00; padding: 15px; font-family: monospace; margin-bottom: 10px; border-left: 5px solid var(--gold); }
+
         .btn { background: var(--police-blue); color: white; padding: 12px 25px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; margin: 5px; }
         
-        .puzzle-grid { display: flex; gap: 20px; margin: 20px 0; align-items: flex-start; }
-        .col { flex: 1; border: 2px dashed #cbd5e1; padding: 15px; min-height: 250px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; }
-        #lijst-1 { background: #ffebee; border-color: #ef9a9a; } 
-        #lijst-2 { background: #e8f5e9; border-color: #a5d6a7; }
-        
-        .drug-card { background: white; border: 2px solid var(--police-blue); padding: 20px; cursor: move; font-weight: bold; border-radius: 8px; width: 280px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
-
         .evidence-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-        .evidence-grid img { width: 100%; border-radius: 4px; border: 1px solid #ccc; }
+        .evidence-grid img { width: 100%; border-radius: 4px; border: 1px solid #ccc; height: 120px; object-fit: cover; }
         
-        .astma-layout { display: grid; grid-template-columns: 360px 1fr; gap: 20px; }
-        .chaos-box { background: #f8f9fa; padding: 15px; border: 1px solid #ddd; max-height: 600px; overflow-y: auto; }
-        .drag-item { background: white; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; cursor: grab; border-left: 5px solid var(--police-blue); }
-        textarea { width: 100%; height: 110px; margin-top: 5px; border: 1px solid #ccc; font-size: 12px; font-family: inherit; padding: 5px; box-sizing: border-box; }
-        .drop-zone { background: #fff; border: 2px solid #ddd; padding: 10px; margin-bottom: 10px; min-height: 120px; }
-        .zone-header { font-weight: bold; font-size: 11px; color: var(--police-blue); margin-bottom: 5px; text-transform: uppercase; }
-        .feed-card { border-left: 6px solid var(--police-blue); background: #fff; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .astma-layout { display: grid; grid-template-columns: 380px 1fr; gap: 20px; }
+        .chaos-box { background: #f8f9fa; padding: 15px; border: 1px solid #ddd; max-height: 650px; overflow-y: auto; }
+        .drag-item { background: white; border: 1px solid #ccc; padding: 10px; margin-bottom: 12px; cursor: grab; border-left: 5px solid var(--police-blue); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        textarea { width: 100%; height: 120px; margin-top: 8px; border: 1px solid #ddd; font-size: 13px; font-family: inherit; padding: 8px; box-sizing: border-box; resize: vertical; background: #fff; }
+        
+        .drop-zone { background: #fff; border: 2px solid #cbd5e1; padding: 10px; margin-bottom: 10px; min-height: 100px; transition: 0.3s; }
+        .drop-zone:hover { border-color: var(--police-blue); background: #f0f4f8; }
+        .zone-header { font-weight: bold; font-size: 11px; color: var(--police-blue); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .feed-card { border-left: 6px solid var(--correct); background: #fff; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
 
 <div id="admin-panel" class="hidden">
-    <strong>👨‍🏫 REGIE</strong>
-    <button class="btn" style="background:var(--gold); color:#000;" onclick="triggerNextDrug()">🔓 VOLGENDE DRUG VRIJGEVEN</button>
-    <button class="btn" style="background:#dc3545; font-size:10px;" onclick="location.reload()">Systeem Reset</button>
+    <strong>👨‍🏫 REGIEPANEEL</strong>
+    <button class="btn" style="background:#dc3545; font-size:11px;" onclick="location.reload()">Systeem Volledig Resetten</button>
 </div>
 
 <div class="container">
-    <div id="screen-1" style="text-align: center;">
+    <div id="screen-1" style="text-align: center; padding: 50px 0;">
         <h1>Toegang Politiesysteem</h1>
-        <input type="text" id="student-name" placeholder="Uw voornaam" style="padding: 10px; width: 250px; margin-bottom:10px; border-radius:4px; border:1px solid #ccc;"><br>
-        <select id="nato-class" style="padding: 10px; width: 272px; margin-bottom:20px; border-radius:4px; border:1px solid #ccc;">
-            <option value="">-- Selecteer Klas --</option>
+        <p>Log in om de training te starten.</p>
+        <input type="text" id="student-name" placeholder="Voornaam" style="padding: 12px; width: 280px; margin-bottom:10px; border-radius:4px; border:1px solid #ccc;"><br>
+        <select id="nato-class" style="padding: 12px; width: 305px; margin-bottom:20px; border-radius:4px; border:1px solid #ccc;">
+            <option value="">-- Kies uw klas --</option>
             <option value="DOCENT">👨‍🏫 DOCENT / ADMIN</option>
-            <option value="Alpha">Alpha</option><option value="Bravo">Bravo</option>
-            <option value="Charlie">Charlie</option><option value="Delta">Delta</option>
-            <option value="Echo">Echo</option><option value="Foxtrot">Foxtrot</option>
-            <option value="Golf">Golf</option><option value="Hotel">Hotel</option>
-            <option value="Juliet">Juliet</option><option value="Kilo">Kilo</option>
-            <option value="Lima">Lima</option><option value="Mike">Mike</option>
+            <option value="Alpha">Alpha</option>
+            <option value="Bravo">Bravo</option>
+            <option value="Charlie">Charlie</option>
+            <option value="Delta">Delta</option>
         </select><br>
-        <button class="btn" onclick="login()">Inloggen</button>
+        <button class="btn" onclick="login()">Systeem Starten</button>
     </div>
 
     <div id="screen-2" class="hidden">
@@ -71,97 +64,84 @@
         <div class="wettekst">
             <div class="bevoegdheid-item">
                 <strong>Lid 1: Toegang & Betreden</strong><br>
-                Opsporingsambtenaren hebben toegang tot plaatsen en vervoermiddelen waar redelijkerwijs vermoeden is van aanwezigheid van middelen uit Lijst I of II.
+                Opsporingsambtenaren hebben toegang tot plaatsen (a) en vervoermiddelen (b) waar redelijkerwijs vermoeden is van aanwezigheid van middelen uit Lijst I of II.
             </div>
             <div class="bevoegdheid-item">
-                <strong>Lid 2: Onderzoek & Schouwing</strong><br>
-                Bevoegdheid tot schouwing en opneming van middelen, het nemen van monsters en het vorderen van inzage in bescheiden/gegevensdragers.
+                <strong>Lid 2: Schouwing & Onderzoek</strong><br>
+                Bevoegdheid tot schouwing van goederen, het nemen van monsters en het vorderen van inzage in bescheiden/gegevensdragers.
             </div>
             <div class="bevoegdheid-item">
                 <strong>Lid 3: Inbeslagneming</strong><br>
-                Opsporingsambtenaren zijn te allen tijde bevoegd tot inbeslagneming van daarvoor vatbare voorwerpen en kunnen de uitlevering daarvan vorderen.
-            </div>
-            <div class="bevoegdheid-item">
-                <strong>Lid 4: Woningen</strong><br>
-                Binnentreden tegen de wil van de bewoner is enkel toegestaan op vertoon van een schriftelijke last of in aanwezigheid van een hulpofficier van justitie.
+                Opsporingsambtenaren zijn te allen tijde bevoegd tot inbeslagneming van daarvoor vatbare voorwerpen.
             </div>
         </div>
-        <button class="btn" onclick="goToScreen(3)">Naar de Live Kwis →</button>
-    </div>
-
-    <div id="screen-3" class="hidden">
-        <h1>Opiumkwis</h1>
-        <div class="puzzle-grid">
-            <div class="col" id="lijst-1" ondrop="dropKwis(event)" ondragover="allowDrop(event)">
-                <div class="zone-header">LIJST I: HARDDRUGS</div>
-            </div>
-            <div id="active-drug-area"></div>
-            <div class="col" id="lijst-2" ondrop="dropKwis(event)" ondragover="allowDrop(event)">
-                <div class="zone-header">LIJST II: SOFTDRUGS</div>
-            </div>
-        </div>
-        <div class="leaderboard">
-            <h3>🏆 Leaderboard</h3>
-            <div id="leaderboard-content" class="score-grid"></div>
-        </div>
-        <button id="btn-naar-casus" class="btn hidden" onclick="goToScreen(4)" style="background:var(--correct)">Naar de Casus →</button>
+        <button class="btn" onclick="goToScreen(4)">Start Casus 'De Kade' →</button>
     </div>
 
     <div id="screen-4" class="hidden">
-        <h1>PV Chaos: De Kade (ASTMA Methode)</h1>
-        <div class="evidence-grid">
-            <img src="Schermafbeelding 2026-04-21 112952.jpg"><img src="Schermafbeelding 2026-04-21 112910.jpg">
-            <img src="Schermafbeelding 2026-04-21 113011.jpg"><img src="Schermafbeelding 2026-04-21 113050.jpg">
+        <h1>PV-Training: Casus 'De Kade'</h1>
+        
+        <div class="oc-instructie">
+            <strong>⚠️ ACADEMISCHE EISEN:</strong><br>
+            Verbeter de onderstaande teksten in het tekstvak voordat je ze versleept.
+            <ul>
+                <li>Gebruik de <strong>ik-vorm</strong> (praat tegen de rechter).</li>
+                <li>Gebruik de <strong>onvoltooid verleden tijd (OVT)</strong>.</li>
+                <li>Benoem expliciet de <strong>redenen van wetenschap</strong> (bijv. "Ik zag...", "Ik rook...").</li>
+            </ul>
         </div>
+
+        <div class="oc-melding">
+            [MELDING OC]: "Eenheid, ga naar de kade nabij de A2. Er staat een verdacht voertuig met een openstaande kofferbak."
+        </div>
+
+        <div class="evidence-grid">
+            <img src="Schermafbeelding 2026-04-21 112952.jpg" title="Voertuig kade">
+            <img src="Schermafbeelding 2026-04-21 112910.jpg" title="Zijaanzicht">
+            <img src="Schermafbeelding 2026-04-21 113011.jpg" title="Verborgen ruimte">
+            <img src="Schermafbeelding 2026-04-21 113050.jpg" title="Inbeslagname">
+        </div>
+
         <div class="astma-layout">
-            <div class="chaos-box" id="chaos-items"></div>
+            <div class="chaos-box" id="chaos-items">
+                <h3>Chaos-fragmenten</h3>
+                <p><small>Bewerk de tekst en sleep naar de juiste ASTMA-fase.</small></p>
+            </div>
             <div class="astma-zones">
-                <div class="drop-zone" data-fase="A" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">AANLEIDING</div></div>
-                <div class="drop-zone" data-fase="S" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">SITUATIE</div></div>
-                <div class="drop-zone" data-fase="T" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">TOEDRACHT</div></div>
-                <div class="drop-zone" data-fase="M" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">MAATREGELEN</div></div>
-                <div class="drop-zone" data-fase="Af" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">AFHANDELING</div></div>
+                <div class="drop-zone" data-fase="A" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">AANLEIDING (A)</div></div>
+                <div class="drop-zone" data-fase="S" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">SITUATIE (S)</div></div>
+                <div class="drop-zone" data-fase="T" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">TOEDRACHT (T)</div></div>
+                <div class="drop-zone" data-fase="M" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">MAATREGELEN (M)</div></div>
+                <div class="drop-zone" data-fase="Af" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">AFHANDELING (Af)</div></div>
             </div>
         </div>
+        
+        <h3 style="margin-top:40px;">Uw Proces-verbaal Feed</h3>
         <div id="pv-feed"></div>
     </div>
 </div>
 
 <script>
-    let userName = "", userClass = "", currentDrugIndex = -1, scores = {};
-    const drugs = [
-        { name: "Cocaïne", target: "lijst-1", hint: "Wit kristalachtig poeder in ponypacks. Ruikt chemisch." },
-        { name: "Hennep", target: "lijst-2", hint: "Groene plantdelen, sterke geur." },
-        { name: "XTC", target: "lijst-1", hint: "Gekleurde tabletten met logo." },
-        { name: "Hasj", target: "lijst-2", hint: "Bruine samengeperste hars." }
-    ];
+    let userName = "", userClass = "";
 
-    // CHAOS TEKSTEN ZONDER 'IK'
+    // BRONTEKSTEN ZONDER 'IK', ZONDER OVT, ZONDER WETENSCHAP (DE CHAOS)
     const pvData = [
-        {f: "A", t: "Melding van de meldkamer betreffende een verdacht voertuig aan de kade nabij de A2."},
-        {f: "S", t: "Ter plaatse werd de Peugeot 5008 (foto 1) aangetroffen. De kofferbak stond deels geopend."},
-        {f: "T", t: "Op het oog was niets zichtbaar. Foto is van bovenaf genomen. Bij de sluiting van de kofferbak bevond zich een metalen plaat. Op kniehoogte was de plaat voelbaar en bij handmatige controle werd een afwijkende plaat waargenomen."},
-        {f: "T", t: "Aan de rechterzijde van de kofferbak werd na het wegtrekken van de bekleding een houten plaat zichtbaar, bevestigd op een metalen plaat."},
-        {f: "T", t: "Aan de linkerzijde werd eveneens een houten plaat zichtbaar na wegtrekken bekleding. Tevens was hier een mogelijk scharnier op de metalen plaat waarneembaar."},
-        {f: "M", t: "In de verborgen ruimte werden 10 pakketten aangetroffen met een totaal gewicht van 10.9 kilo cocaïne."},
-        {f: "M", t: "Op grond van de Opiumwet zijn de witte pakketten in beslag genomen."},
-        {f: "Af", t: "De verdachte is aangehouden en voor voorgeleiding overgebracht naar cellencomplex Houten."}
+        {f: "A", t: "Melding van de meldkamer over een auto die raar stond bij de kade op de A2."},
+        {f: "S", t: "Er staat een zwarte Peugeot 5008. De kofferbak is deels geopend."},
+        {f: "T", t: "Op het oog is niets te zien. Bij de sluiting van de kofferbak zit een metalen plaat. Op kniehoogte zit die plaat en met een vinger erin voelt het als een plaat die er niet hoort."},
+        {f: "T", t: "Rechterzijde kofferbak, na wegtrekken bekleding wordt een houten plaat zichtbaar op een metalen plaat."},
+        {f: "T", t: "Linkerzijde kofferbak, weer een houten plaat zichtbaar. Metalen plaat is mogelijk voorzien van een scharnier."},
+        {f: "M", t: "In de verborgen ruimte liggen 10 pakken met een gewicht van totaal 10.9 kilo cocaïne."},
+        {f: "M", t: "De witte pakketten zijn op grond van de Opiumwet afgepakt en in beslag genomen."},
+        {f: "Af", t: "Verdachte is aangehouden en overgebracht naar cellencomplex Houten voor onderzoek."}
     ];
 
     function login() {
         userName = document.getElementById('student-name').value;
         userClass = document.getElementById('nato-class').value;
-        if(!userName || !userClass) return alert("Vul a.u.b. uw voornaam en klas in.");
+        if(!userName || !userClass) return alert("Vul a.u.b. alle velden in.");
         if(userClass === "DOCENT") document.getElementById('admin-panel').classList.remove('hidden');
-        initScores(); goToScreen(2);
-    }
-
-    function initScores() {
-        const container = document.getElementById('leaderboard-content');
-        container.innerHTML = "";
-        ["Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "Juliet", "Kilo", "Lima", "Mike"].forEach(k => {
-            scores[k] = 0; container.innerHTML += `<div class="score-row">${k}<strong id="score-${k}">0</strong></div>`;
-        });
+        goToScreen(2);
     }
 
     function goToScreen(num) {
@@ -170,48 +150,42 @@
         if(num === 4) loadChaosItems();
     }
 
-    function triggerNextDrug() {
-        currentDrugIndex++;
-        if(currentDrugIndex < drugs.length) {
-            document.getElementById('active-drug-area').innerHTML = `<div class="drug-card" draggable="true" ondragstart="drag(event)" id="current-drug"><small>KENMERKEN:</small><br>${drugs[currentDrugIndex].hint}</div>`;
-        } else { alert("Alle drugs behandeld."); document.getElementById('btn-naar-casus').classList.remove('hidden'); }
-    }
-
-    function allowDrop(ev) { ev.preventDefault(); }
-    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
-
-    function dropKwis(ev) {
-        ev.preventDefault();
-        if(ev.currentTarget.id === drugs[currentDrugIndex].target) {
-            if(userClass !== "DOCENT") { scores[userClass]++; document.getElementById('score-' + userClass).innerText = scores[userClass]; }
-            document.getElementById('active-drug-area').innerHTML = `<div style="color:green; font-weight:bold;">✔ CORRECT: ${drugs[currentDrugIndex].name}</div>`;
-        } else alert("Onjuiste lijst!");
-    }
-
     function loadChaosItems() {
         const container = document.getElementById('chaos-items');
-        container.innerHTML = "<h3>Chaos-teksten</h3><p><small>Bewerk de teksten en sleep naar ASTMA.</small></p>";
         pvData.forEach((item, i) => {
-            container.innerHTML += `<div class="drag-item" draggable="true" ondragstart="dragPV(event, '${item.f}', 'ta-${i}')" id="pv-${i}">
-                <textarea id="ta-${i}">${item.t}</textarea>
-            </div>`;
+            const div = document.createElement('div');
+            div.className = 'drag-item';
+            div.draggable = true;
+            div.id = 'pv-' + i;
+            div.innerHTML = `<textarea id="ta-${i}">${item.t}</textarea>`;
+            div.ondragstart = (ev) => {
+                ev.dataTransfer.setData("fase", item.f);
+                ev.dataTransfer.setData("txt", document.getElementById('ta-' + i).value);
+                ev.dataTransfer.setData("id", div.id);
+            };
+            container.appendChild(div);
         });
     }
 
-    function dragPV(ev, fase, taId) {
-        ev.dataTransfer.setData("fase", fase);
-        ev.dataTransfer.setData("txt", document.getElementById(taId).value);
-        ev.dataTransfer.setData("id", ev.target.id);
-    }
+    function allowDrop(ev) { ev.preventDefault(); }
 
     function dropPV(ev) {
         ev.preventDefault();
         const zoneFase = ev.currentTarget.dataset.fase;
-        if(zoneFase === ev.dataTransfer.getData("fase") || userClass === "DOCENT") {
-            document.getElementById(ev.dataTransfer.getData("id")).style.display = 'none';
+        const itemFase = ev.dataTransfer.getData("fase");
+        const itemTxt = ev.dataTransfer.getData("txt");
+        const itemId = ev.dataTransfer.getData("id");
+
+        if(zoneFase === itemFase || userClass === "DOCENT") {
+            document.getElementById(itemId).style.display = 'none';
             const feed = document.getElementById('pv-feed');
-            feed.innerHTML = `<div class="feed-card"><strong>${userName} (${userClass}) - Fase ${zoneFase}</strong><p>${ev.dataTransfer.getData("txt")}</p></div>` + feed.innerHTML;
-        } else alert("Onjuist voor deze fase!");
+            const card = document.createElement('div');
+            card.className = 'feed-card';
+            card.innerHTML = `<strong>${userName} - FASE ${zoneFase}</strong><p>${itemTxt}</p>`;
+            feed.insertBefore(card, feed.firstChild);
+        } else {
+            alert("STOP: Dit tekstfragment hoort niet in de fase '" + zoneFase + "'. Kijk goed naar de ASTMA structuur!");
+        }
     }
 </script>
 
