@@ -5,69 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GGP Training - Opiumwet & ASTMA</title>
     <style>
-        :root { --police-blue: #003082; --gold: #ffcc00; --light-bg: #f4f7f9; --correct: #28a745; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--light-bg); margin: 0; padding: 20px; }
-        .container { background: white; max-width: 1100px; margin: 0 auto; padding: 30px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        :root { --police-blue: #003082; --gold: #ffcc00; --light-bg: #f4f7f9; --correct: #28a745; --wrong: #dc3545; --white: #ffffff; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--light-bg); margin: 0; padding: 20px; line-height: 1.5; }
+        .container { background: var(--white); max-width: 1200px; margin: 0 auto; padding: 30px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .hidden { display: none !important; }
         
-        #admin-panel { background: #333; color: white; padding: 15px; border-radius: 4px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        h1, h2, h3 { color: var(--police-blue); border-bottom: 3px solid var(--police-blue); padding-bottom: 5px; }
-        
-        .oc-instructie { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin: 15px 0; font-size: 0.95em; color: #0d47a1; }
-        .oc-melding { background: #1a1a1a; color: #00ff00; padding: 15px; font-family: monospace; margin-bottom: 10px; border-left: 5px solid var(--gold); }
+        /* Theorie Tabs */
+        .tab-container { margin-top: 20px; }
+        .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
+        .tab { padding: 12px 25px; cursor: pointer; font-weight: bold; color: #666; border-bottom: 3px solid transparent; }
+        .tab.active { color: var(--police-blue); border-bottom: 3px solid var(--police-blue); }
+        .tab-content { background: #fdfdfd; padding: 20px; border: 1px solid #eee; border-radius: 0 0 8px 8px; }
 
-        .btn { background: var(--police-blue); color: white; padding: 12px 25px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; margin: 5px; }
+        /* Kaarten voor info */
+        .info-card { background: white; border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-left: 5px solid var(--police-blue); border-radius: 4px; }
+        .list-1 { border-left-color: #d32f2f; } /* Harddrugs */
+        .list-2 { border-left-color: #388e3c; } /* Softdrugs */
+
+        /* Video & ASTMA Layouts */
+        .video-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .check-column { background: #f8f9fa; padding: 15px; border-radius: 8px; border-top: 5px solid var(--police-blue); }
+        textarea { width: 100%; height: 160px; margin-top: 10px; border: 1px solid #ddd; padding: 10px; box-sizing: border-box; font-family: inherit; }
         
-        .astma-layout { display: grid; grid-template-columns: 420px 1fr; gap: 20px; }
-        .chaos-box { background: #f8f9fa; padding: 15px; border: 1px solid #ddd; max-height: 800px; overflow-y: auto; }
-        .drag-item { background: white; border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; cursor: grab; border-left: 5px solid var(--police-blue); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        textarea { width: 100%; height: 160px; margin-top: 10px; border: 1px solid #ddd; font-size: 13px; font-family: inherit; padding: 10px; box-sizing: border-box; resize: vertical; }
+        #admin-panel { background: #333; color: white; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .btn { background: var(--police-blue); color: white; padding: 12px 25px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
         
-        .drop-zone { background: #fff; border: 2px solid #cbd5e1; padding: 10px; margin-bottom: 10px; min-height: 120px; transition: 0.2s; }
-        .drop-zone:hover { background: #f0f4f8; border-color: var(--police-blue); }
-        .zone-header { font-weight: bold; font-size: 11px; color: var(--police-blue); margin-bottom: 5px; text-transform: uppercase; }
-        .feed-card { border-left: 6px solid var(--correct); background: #fff; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .astma-layout { display: grid; grid-template-columns: 420px 1fr; gap: 25px; }
+        .chaos-box { background: #f1f5f9; padding: 15px; border: 1px solid #cbd5e1; max-height: 800px; overflow-y: auto; }
+        .drag-item { background: white; border: 1px solid #cbd5e1; padding: 12px; margin-bottom: 15px; cursor: grab; border-left: 6px solid var(--police-blue); }
+        .drop-zone { background: #fff; border: 2px dashed #cbd5e1; padding: 15px; margin-bottom: 15px; min-height: 100px; }
+        .zone-header { font-weight: bold; font-size: 12px; color: var(--police-blue); margin-bottom: 8px; text-transform: uppercase; }
+        .feed-card { border-left: 8px solid var(--correct); background: #fff; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
 <div id="admin-panel" class="hidden">
     <strong>👨‍🏫 REGIEPANEEL</strong>
-    <button class="btn" style="background:#dc3545; font-size:11px;" onclick="location.reload()">Systeem Reset</button>
+    <button class="btn" style="background:var(--wrong);" onclick="location.reload()">Herstarten</button>
 </div>
 
 <div class="container">
-    <div id="screen-1" style="text-align: center; padding: 40px 0;">
-        <h1>Toegang Politiesysteem</h1>
-        <input type="text" id="student-name" placeholder="Voornaam" style="padding: 12px; width: 280px; margin-bottom:10px;"><br>
-        <select id="nato-class" style="padding: 12px; width: 305px; margin-bottom:20px;">
+    <div id="screen-1" style="text-align: center;">
+        <h1>Toegang GGP Training</h1>
+        <input type="text" id="student-name" placeholder="Voornaam" style="padding:12px; width:280px; margin-bottom:10px;"><br>
+        <select id="nato-class" style="padding:12px; width:305px; margin-bottom:20px;">
             <option value="">-- Kies uw klas --</option>
-            <option value="DOCENT">👨‍🏫 DOCENT</option>
             <option value="Alpha">Alpha</option><option value="Bravo">Bravo</option>
-            <option value="Charlie">Charlie</option><option value="Delta">Delta</option>
+            <option value="DOCENT">👨‍🏫 DOCENT</option>
         </select><br>
-        <button class="btn" onclick="login()">Start Training</button>
+        <button class="btn" onclick="login()">Starten</button>
+    </div>
+
+    <div id="screen-2" class="hidden">
+        <h1>Juridisch Kader: Opiumwet</h1>
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" id="tab-theorie" onclick="switchTab('theorie')">📖 1. THEORIE (DE BASIS)</div>
+                <div class="tab" id="tab-bevoegdheid" onclick="switchTab('bevoegdheid')">⚖️ 2. BEVOEGDHEDEN (HET HANDELEN)</div>
+            </div>
+
+            <div id="content-theorie" class="tab-content">
+                <h3>Classificatie van Middelen</h3>
+                <div class="info-card list-1">
+                    <strong>Lijst I (Harddrugs) - Artikel 2</strong><br>
+                    Middelen met een onaanvaardbaar risico (bijv. Cocaïne, MDMA, Heroïne). 
+                    Verboden: Bezit, vervoer, productie en verkoop.
+                </div>
+                <div class="info-card list-2">
+                    <strong>Lijst II (Softdrugs) - Artikel 3</strong><br>
+                    Middelen met een minder risico (bijv. Cannabisproducten, Lachgas voor recreatief gebruik). 
+                    Verboden: Idem als lijst I, maar met andere strafmaten.
+                </div>
+                <p><small><em>Onthoud: Voor opsporing is altijd een <strong>redelijk vermoeden</strong> van schuld aan een strafbaar feit uit deze artikelen nodig.</em></small></p>
+            </div>
+
+            <div id="content-bevoegdheid" class="tab-content hidden">
+                <h3>Artikel 9 Opiumwet: De Opsporing</h3>
+                <div class="info-card">
+                    <strong>Lid 1: Toegang & Vervoermiddelen</strong><br>
+                    Opsporingsambtenaren hebben toegang tot alle plaatsen (m.u.v. woningen zonder toestemming) en mogen vervoermiddelen onderzoeken.
+                </div>
+                <div class="info-card">
+                    <strong>Lid 2: Schouwing & Vorderen</strong><br>
+                    Je mag verpakkingen openen, monsters nemen en inzage vorderen in zakelijke gegevens.
+                </div>
+                <div class="info-card">
+                    <strong>Lid 3: Inbeslagneming</strong><br>
+                    Je mag alle voorwerpen die dienen tot bewijs of die verboden zijn (Lijst I/II) in beslag nemen.
+                </div>
+            </div>
+        </div>
+        <div style="text-align: right; margin-top: 20px;">
+            <button class="btn" onclick="goToScreen(3)">Naar de Maastricht Check →</button>
+        </div>
+    </div>
+
+    <div id="screen-3" class="hidden">
+        <h1>Maastricht Check</h1>
+        <div class="video-layout">
+            <iframe width="100%" height="360" src="https://www.youtube.com/embed/twI32tp_KNI" frameborder="0" allowfullscreen></iframe>
+            <div style="display: grid; grid-template-rows: 1fr 1fr; gap: 15px;">
+                <div class="check-column"><h3>✅ Goed</h3><textarea id="v-goed"></textarea></div>
+                <div class="check-column" style="border-top-color:var(--wrong)"><h3>❌ Niet goed</h3><textarea id="v-fout" placeholder="Denk aan de informatieplicht..."></textarea></div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="btn-show-analysis" class="btn" style="background:var(--gold); color:black;" onclick="showVideoAnalysis()">Klaar: Analyse Controleren</button>
+        </div>
+        <div id="video-feedback" class="hidden" style="background:#fffde7; padding:20px; margin-top:20px; border:2px solid var(--gold);">
+            <h3>🔍 Feedback</h3>
+            <p>Agenten vergeten vaak te vertellen <strong>wat</strong> ze doen en <strong>waarom</strong> (de bevoegdheid). Dit zie je ook in Maastricht.</p>
+            <button class="btn" onclick="goToScreen(4)">Door naar de Casus →</button>
+        </div>
     </div>
 
     <div id="screen-4" class="hidden">
-        <h1>PV-Training: De Lekkade (ASTMA)</h1>
-        
-        <div class="oc-instructie">
-            <strong>⚠️ OPDRACHT:</strong><br>
-            De onderstaande chaos-teksten bevatten cruciale details (namen, ID-gegevens, locaties). 
-            Herschrijf ze in de tekstvakken naar de academische standaard: 
-            <strong>Ik-vorm</strong>, <strong>OVT</strong> en <strong>Redenen van wetenschap</strong>. 
-            Sleep ze daarna naar de juiste ASTMA-fase.
-        </div>
-
-        <div class="oc-melding">
-            [MELDING OC]: "Noodhulp, ga naar de Lekkade t.h.v. hm-paal 12.4 in Houten. Verdacht voertuig SH-828-P."
-        </div>
-
+        <h1>PV Casus: De Lekkade</h1>
         <div class="astma-layout">
-            <div class="chaos-box" id="chaos-items">
-                <h3>Chaos-fragmenten</h3>
-            </div>
+            <div class="chaos-box" id="chaos-items"></div>
             <div class="astma-zones">
                 <div class="drop-zone" data-fase="A" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">AANLEIDING (A)</div></div>
                 <div class="drop-zone" data-fase="S" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">SITUATIE (S)</div></div>
@@ -76,23 +132,21 @@
                 <div class="drop-zone" data-fase="Af" ondrop="dropPV(event)" ondragover="allowDrop(event)"><div class="zone-header">AFHANDELING (Af)</div></div>
             </div>
         </div>
-        
         <div id="pv-feed"></div>
     </div>
 </div>
 
 <script>
     let userName = "", userClass = "";
-
     const pvData = [
-        {f: "A", t: "Dinsdag 21 april 2026, 11:15 uur. Melding via de meldkamer voor de Lekkade in Houten, t.h.v. hectometerpaal 12.4. Een getuige heeft een zwart voertuig gezien met de achterklep open."},
-        {f: "S", t: "Om 11:23 uur aankomst op de Lekkade. Er staat een zwarte Peugeot 5008, kenteken SH-828-P. Een man staat bij de geopende kofferbak. Hij geeft zijn naam op als Jean-Pierre Vermeulen, geboren 12-05-1988 te Utrecht. Hij woont aan de Dorpsstraat 12 te Nieuwegein."},
-        {f: "S", t: "De man overhandigt op verzoek een identiteitsbewijs. Het is een Nederlands paspoort, nummer NK7281920, geldig tot 20 oktober 2030. De foto op het document komt overeen met het gezicht van de man die voor de auto staat."},
-        {f: "T", t: "Bij de drempel van de kofferbak is een metalen plaat zichtbaar. Na onderzoek met de hand voelt de plaat los aan. De dikte van de plaat wijkt af van wat normaal is bij dit type Peugeot."},
-        {f: "T", t: "Achter de bekleding aan de rechterzijde zit een houten paneel verborgen. Dit paneel is met zilverkleurige schroeven bevestigd aan een stalen frame onder de achterbank."},
-        {f: "M", t: "In de ruimte onder de panelen liggen 10 witte pakketten. Ze wegen samen precies 10.9 kilo. Een indicatietest ter plaatse geeft aan dat het om cocaïne gaat."},
-        {f: "M", t: "Op grond van Artikel 9 van de Opiumwet worden de 10 pakketten drugs en de Peugeot SH-828-P in beslag genomen."},
-        {f: "Af", t: "Jean-Pierre Vermeulen wordt om 11:45 uur aangehouden. Hij is overgebracht naar het cellencomplex in Houten aan de Schaft 5. De hulpofficier van justitie is geïnformeerd."}
+        {f: "A", t: "Dinsdag 21 april 2026, 11:15 uur. Melding OC voor de Lekkade in Houten, hm-paal 12.4. Zwart voertuig met geopende kofferbak."},
+        {f: "S", t: "Aankomst 11:23 uur. Zwarte Peugeot 5008, SH-828-P. Man: Jean-Pierre Vermeulen, geb. 12-05-1988 Utrecht, wonende Dorpsstraat 12 Nieuwegein."},
+        {f: "S", t: "Overhandiging Nederlands paspoort, nummer NK7281920, geldig tot 20-10-2030."},
+        {f: "T", t: "Metalen plaat bij de drempel kofferbak voelt los aan. Dikte wijkt af van de standaard."},
+        {f: "T", t: "Houten paneel met zilverkleurige schroeven achter bekleding rechterzijde bagageruimte."},
+        {f: "M", t: "10 witte pakketten, totaal 10.9 kilo. Positieve indicatietest cocaïne."},
+        {f: "M", t: "Inbeslagneming drugs en Peugeot SH-828-P conform Art. 9 lid 3 Opiumwet."},
+        {f: "Af", t: "Vermeulen aangehouden om 11:45 uur. Transport naar Schaft 5 te Houten. Hulpofficier geïnformeerd."}
     ];
 
     function login() {
@@ -100,13 +154,30 @@
         userClass = document.getElementById('nato-class').value;
         if(!userName || !userClass) return alert("Vul gegevens in.");
         if(userClass === "DOCENT") document.getElementById('admin-panel').classList.remove('hidden');
-        document.getElementById('screen-1').classList.add('hidden');
-        document.getElementById('screen-4').classList.remove('hidden');
-        loadChaosItems();
+        goToScreen(2);
+    }
+
+    function switchTab(type) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        document.getElementById('tab-' + type).classList.add('active');
+        document.getElementById('content-' + type).classList.remove('hidden');
+    }
+
+    function showVideoAnalysis() {
+        document.getElementById('video-feedback').classList.remove('hidden');
+        document.getElementById('btn-show-analysis').classList.add('hidden');
+    }
+
+    function goToScreen(num) {
+        document.querySelectorAll('.container > div').forEach(d => d.classList.add('hidden'));
+        document.getElementById('screen-' + num).classList.remove('hidden');
+        if(num === 4) loadChaosItems();
     }
 
     function loadChaosItems() {
         const container = document.getElementById('chaos-items');
+        container.innerHTML = "<h3>Chaos-fragmenten</h3>";
         pvData.forEach((item, i) => {
             const div = document.createElement('div');
             div.className = 'drag-item';
@@ -123,23 +194,18 @@
     }
 
     function allowDrop(ev) { ev.preventDefault(); }
-
     function dropPV(ev) {
         ev.preventDefault();
         const zoneFase = ev.currentTarget.dataset.fase;
-        const itemFase = ev.dataTransfer.getData("fase");
-        const itemTxt = ev.dataTransfer.getData("txt");
-        const itemId = ev.dataTransfer.getData("id");
-
-        if(zoneFase === itemFase || userClass === "DOCENT") {
-            document.getElementById(itemId).style.display = 'none';
+        if(zoneFase === ev.dataTransfer.getData("fase") || userClass === "DOCENT") {
+            document.getElementById(ev.dataTransfer.getData("id")).style.display = 'none';
             const feed = document.getElementById('pv-feed');
             const card = document.createElement('div');
             card.className = 'feed-card';
-            card.innerHTML = `<strong>FASE ${zoneFase}</strong><p>${itemTxt}</p>`;
+            card.innerHTML = `<strong>FASE ${zoneFase}</strong><p>${ev.dataTransfer.getData("txt")}</p>`;
             feed.insertBefore(card, feed.firstChild);
         } else {
-            alert("Onjuiste fase!");
+            alert("Fragment hoort in een andere fase!");
         }
     }
 </script>
