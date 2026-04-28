@@ -36,8 +36,10 @@
             <h2 style="text-align:center;">GGP Opleidingscentrum</h2>
             <input type="text" id="user-name" placeholder="Voornaam" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:4px;">
             <select id="user-class" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:4px;">
-                <option value="">Kies je klas...</option>
-                <option>Alpha</option><option>Bravo</option><option>Charlie</option>
+                <option value="">Kies klas...</option>
+                <option>Alpha</option>
+                <option>Bravo</option>
+                <option>Charlie</option>
             </select>
             <button class="btn" onclick="startSession()">Start de Training</button>
         </div>
@@ -49,16 +51,16 @@
         
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin:20px 0;">
             <div>
-                <label><strong>Correcte bevoegdheden:</strong></label>
+                <label><strong>Veld 1: Bevoegdheden correct uitgevoerd:</strong></label>
                 <textarea id="v-1" oninput="pushUpdate()"></textarea>
             </div>
             <div>
-                <label><strong>Verbeterpunten:</strong></label>
+                <label><strong>Veld 2: Verbeterpunten voor de agenten:</strong></label>
                 <textarea id="v-2" oninput="pushUpdate()"></textarea>
             </div>
         </div>
 
-        <h3 style="border-bottom: 3px solid var(--gold); padding-bottom: 10px;">Live Feed: Inzichten van je collega's</h3>
+        <h3 style="border-bottom: 3px solid var(--gold); padding-bottom: 10px;">Gedeelde Live Feed (voornaam zichtbaar)</h3>
         <div id="class-feed" class="feed-container"></div>
         <button class="btn" style="margin-top:30px; width:auto;" onclick="showScreen(4)">Naar de Casus Lekkade</button>
     </div>
@@ -68,12 +70,12 @@
         <div style="background:#1e293b; color:#f8fafc; padding:25px; border-radius:8px; border-left:10px solid var(--gold); margin-bottom:30px; line-height:1.6;">
             <strong>MELDING OPERATIONEEL CENTRUM [14:42u]</strong><br>
             "Eenheid 20.10, koers naar de Lekkade in Houten. Getuige meldt een zwarte Peugeot 208, kenteken beginnend met 12-XX-XX, die al dertig minuten stationair draait op de parkeerplaats nabij het recreatieterrein. <br><br>
-            <strong>Signalement:</strong> Man, ongeveer 20-25 jaar, gekleed in een donkerblauze hoodie van het merk 'The North Face'. De man verlaat de auto telkens wanneer er een fietser stopt, wisselt kortstondig goederen uit tegen contant geld bij het bestuurdersraam en stapt dan weer in. De melder ziet dat de man zeer alert reageert op passerende politieauto's."
+            <strong>Signalement:</strong> Man, ongeveer 20-25 jaar, gekleed in een donkerblauwe hoodie van het merk 'The North Face'. De man verlaat de auto telkens wanneer er een fietser stopt, wisselt kortstondig goederen uit tegen contant geld bij het bestuurdersraam en stapt dan weer in."
         </div>
 
         <div style="display:grid; grid-template-columns: 450px 1fr; gap:30px;">
             <div id="l-pool" class="pool">
-                <h3 style="margin-top:0;">Chaos-elementen (Pv-stijl)</h3>
+                <h3 style="margin-top:0;">Chaos-elementen (PV-stijl)</h3>
             </div>
             <div>
                 <div class="zone" data-f="A" ondrop="drop(event)" ondragover="allow(event)"><span class="label-header">AANLEIDING</span></div>
@@ -102,11 +104,11 @@
     let uName = "", uClass = "";
 
     const lekkade = [
-        {f:"A", t:"De opdracht van het Operationeel Centrum luidt om naar de Lekkade te Houten te gaan alwaar een voertuig en een persoon staan die mogelijk betrokken zijn bij de handel in verdovende middelen."},
-        {f:"S", t:"Op de aangegeven locatie staat de zwarte Peugeot 208 stil. De bestuurder, een man met een donkerblauwe hoodie, voldoet volledig aan het door de getuige opgegeven signalement."},
-        {f:"T", t:"Tijdens de controle op basis van artikel 9 van de Opiumwet vertoont de verdachte hevige transpiratie en trillende handen. In de middenconsole van het voertuig liggen diverse gripzakjes gevuld met een witte poederachtige substantie en een bundel bankbiljetten in diverse coupures."},
-        {f:"M", t:"De verdachte wordt direct aangehouden voor het overtreden van de Opiumwet. De gripzakjes met de witte substantie en het contante geld worden op basis van de bevoegdheden in artikel 9, derde lid, van de Opiumwet in beslag genomen voor nader onderzoek."},
-        {f:"Af", t:"De verdachte wordt overgebracht naar het politiecomplex. De cautie wordt aan de verdachte medegedeeld en de hulpofficier van justitie wordt in kennis gesteld van de aanhouding en de inbeslagname."}
+        {f:"A", t:"De opdracht van het Operationeel Centrum luidt om naar de Lekkade te Houten te gaan ter controle van een voertuig en een persoon die mogelijk betrokken zijn bij de handel in verdovende middelen."},
+        {f:"S", t:"Op de aangegeven locatie staat de zwarte Peugeot 208 geparkeerd. De bestuurder, een man met een donkerblauwe hoodie, zit achter het stuur en reageert alert bij het zien van de dienstauto."},
+        {f:"T", t:"Tijdens de controle op basis van artikel 9 van de Opiumwet overhandigt de man een bundel bankbiljetten. In de middenconsole van het voertuig liggen meerdere transparante gripzakjes gevuld met een witte poederachtige substantie."},
+        {f:"M", t:"De verdachte wordt aangehouden voor het overtreden van de Opiumwet. De gripzakjes met de witte substantie en het contante geld worden op basis van artikel 9, derde lid, van de Opiumwet in beslag genomen."},
+        {f:"Af", t:"De verdachte wordt overgebracht naar het politiecomplex voor verhoor. De cautie wordt medegedeeld en de hulpofficier van justitie wordt in kennis gesteld van de aanhouding en de inbeslagname."}
     ];
 
     window.startSession = () => {
@@ -119,8 +121,8 @@
             const data = snap.val();
             for(let user in data) {
                 feed.innerHTML += `<div class="feed-card"><strong>Collega ${user}</strong>
-                    <p style="font-size:12px;"><b>Goed:</b> ${data[user].v1 || '...'}</p>
-                    <p style="font-size:12px;"><b>Beter:</b> ${data[user].v2 || '...'}</p></div>`;
+                    <p style="font-size:12px;"><b>Veld 1:</b> ${data[user].v1 || '...'}</p>
+                    <p style="font-size:12px;"><b>Veld 2:</b> ${data[user].v2 || '...'}</p></div>`;
             }
         });
         loadLekkade(); showScreen(3);
