@@ -8,7 +8,7 @@
         :root { --police-blue: #003082; --gold: #ffcc00; --light-bg: #f0f4f8; --white: #ffffff; --correct: #28a745; --wrong: #dc3545; }
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light-bg); margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 1300px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 8px solid var(--police-blue); }
+        .container { max-width: 1300px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 8px solid var(--police-blue); position: relative; }
         .hidden { display: none !important; }
         h1, h2 { color: var(--police-blue); text-transform: uppercase; letter-spacing: 1px; }
         
@@ -26,6 +26,7 @@
         .btn { background: var(--police-blue); color: white; padding: 12px 28px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
         .btn:hover { background: #002060; transform: translateY(-2px); }
         .btn.gold { background: var(--gold); color: black; }
+        .btn-reset { position: absolute; top: 20px; right: 20px; background: #64748b; font-size: 12px; padding: 8px 15px; }
 
         /* Casus Elementen */
         .oc-box { background: #1e293b; color: #f8fafc; padding: 25px; border-radius: 8px; border-left: 10px solid var(--gold); margin-bottom: 30px; font-family: 'Courier New', Courier, monospace; line-height: 1.5; }
@@ -46,15 +47,18 @@
 <body>
 
 <div class="container">
+    <button id="reset-btn" class="btn btn-reset hidden" onclick="resetApp()">Reset Sessie</button>
+
     <div id="screen-1">
         <div class="login-box">
             <h2 style="text-align:center;">GGP Terminal</h2>
             <input type="text" id="voornaam-input" placeholder="Voornaam">
             <select id="nato-class">
                 <option value="">-- Kies klas --</option>
-                <option>Alpha</option><option>Bravo</option><option>Charlie</option><option>Delta</option>
-                <option>Echo</option><option>Foxtrot</option><option>Golf</option><option>Hotel</option>
-                <option>Juliet</option><option>Kilo</option><option>Lima</option><option>Mike</option>
+                <option>Alpha</option><option>Bravo</option><option>Charlie</option>
+                <option>Delta</option><option>Echo</option><option>Foxtrot</option>
+                <option>Golf</option><option>Hotel</option><option>Juliet</option>
+                <option>Kilo</option><option>Lima</option><option>Mike</option>
             </select>
             <button class="btn" style="width:100%;" onclick="startModule()">Start Module</button>
         </div>
@@ -137,7 +141,26 @@
     </div>
 </div>
 
-<script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCJ5of6K5MRFXMOiEqEyZxZbs1xoJtXuN8",
+        authDomain: "pvaangifteinleveren.firebaseapp.com",
+        databaseURL: "https://pvaangifteinleveren-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "pvaangifteinleveren",
+        storageBucket: "pvaangifteinleveren.firebasestorage.app",
+        messagingSenderId: "989190242332",
+        appId: "1:989190242332:web:40bb7c408441c707835fd9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let currentStudent = "";
+    let currentKlas = "";
+
     const lekkadeChunks = [
         {f: "A", t: "De meldkamer geeft de opdracht om naar de Lekkade te gaan vanwege een melding over mogelijke drugshandel vanuit een zwart voertuig."},
         {f: "S", t: "Ter plaatse staat de zwarte Peugeot geparkeerd met daarin een man die volledig voldoet aan het opgegeven signalement."},
@@ -146,21 +169,36 @@
         {f: "Af", t: "De verdachte is aangehouden en de cautie is medegedeeld. De man is voor voorgeleiding overgebracht naar het bureau Houten."}
     ];
 
-    function startModule() {
-        const n = document.getElementById('voornaam-input').value;
-        const k = document.getElementById('nato-class').value;
-        if(!n || !k) return alert("Vul je naam en klas in.");
-        document.getElementById('userDisplay').innerText = n + " - Klas: " + k;
+    window.startModule = function() {
+        currentStudent = document.getElementById('voornaam-input').value;
+        currentKlas = document.getElementById('nato-class').value;
+        if(!currentStudent || !currentKlas) return alert("Vul je naam en klas in.");
+        
+        push(ref(db, 'activiteit/'), {
+            student: currentStudent,
+            klas: currentKlas,
+            actie: "start_module",
+            tijd: new Date().toISOString()
+        });
+
+        document.getElementById('userDisplay').innerText = currentStudent + " - Klas: " + currentKlas;
+        document.getElementById('reset-btn').classList.remove('hidden');
         goToScreen(2);
     }
 
-    function goToScreen(s) {
+    window.resetApp = function() {
+        if(confirm("Weet je zeker dat je opnieuw wilt beginnen?")) {
+            location.reload();
+        }
+    }
+
+    window.goToScreen = function(s) {
         document.querySelectorAll('.container > div').forEach(d => d.classList.add('hidden'));
         document.getElementById('screen-' + s).classList.remove('hidden');
         if (s === 4) loadLekkade();
     }
 
-    function showTab(t) {
+    window.showTab = function(t) {
         document.getElementById('content-info').classList.toggle('hidden', t==='kwis');
         document.getElementById('content-kwis').classList.toggle('hidden', t==='info');
         document.querySelector('.tab:nth-child(1)').classList.toggle('active', t==='info');
@@ -170,7 +208,7 @@
     function loadLekkade() {
         const pool = document.getElementById('chaos-pool');
         pool.innerHTML = "<h3>Chaos-elementen</h3>";
-        lekkadeChunks.sort(() => Math.random() - 0.5).forEach((c, i) => {
+        [...lekkadeChunks].sort(() => Math.random() - 0.5).forEach((c, i) => {
             const div = document.createElement('div');
             div.className = 'chaos-item'; div.draggable = true; div.id = 'ch-'+i;
             div.innerHTML = `<textarea readonly>${c.t}</textarea>`;
@@ -183,22 +221,31 @@
         });
     }
 
-    function allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add('active'); }
-    function dropBlock(e) {
+    window.allowDrop = function(e) { e.preventDefault(); e.currentTarget.classList.add('active'); }
+    
+    window.dropBlock = function(e) {
         e.preventDefault();
         const f = e.dataTransfer.getData("f");
         const t = e.dataTransfer.getData("t");
         const id = e.dataTransfer.getData("id");
-        e.currentTarget.classList.remove('active');
+        const zone = e.currentTarget;
+        zone.classList.remove('active');
         
-        if (e.currentTarget.dataset.f === f) {
+        if (zone.dataset.f === f) {
             const display = document.createElement('div');
             display.style.padding = "10px"; display.style.background = "#fff";
             display.style.border = "1px solid #28a745"; display.style.marginTop = "5px";
             display.style.fontSize = "13px";
             display.innerText = t;
-            e.currentTarget.appendChild(display);
+            zone.appendChild(display);
             document.getElementById(id).remove();
+
+            push(ref(db, `resultaten/${currentKlas}/${currentStudent}`), {
+                onderdeel: zone.dataset.f,
+                tekst: t,
+                tijd: new Date().toISOString()
+            });
+
         } else {
             alert("Analyseer de tekst opnieuw. Dit onderdeel hoort in een andere fase van het dossier.");
         }
